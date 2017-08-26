@@ -1,0 +1,1082 @@
+*** General ***
+
+owner    = Peter Random
+contact  = some@address.nowhere
+mailhost = my.mail.host
+sendmail = /usr/sbin/sendmail
+# NOTE: do not put the Image Cache below cgi-bin
+# since all files under cgi-bin will be executed ... this is not
+# good for images.
+imgcache = /usr/local/smokeping/cache
+imgurl   = cache
+datadir  = /usr/local/smokeping/data
+piddir  = /usr/local/smokeping/var
+cgiurl   = http://some.url/smokeping.cgi
+smokemail = /usr/local/smokeping/etc/smokemail.dist
+tmail = /usr/local/smokeping/etc/tmail.dist
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = alertee@address.somewhere
+from = smokealert@company.xy
+
++someloss
+type = loss
+# in percent
+pattern = >0%,*12*,>0%,*12*,>0%
+comment = loss 3 times  in a row
+
+*** Database ***
+
+step     = 60
+pings    = 20
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  1008
+AVERAGE  0.5  12  4320
+    MIN  0.5  12  4320
+    MAX  0.5  12  4320
+AVERAGE  0.5 144   720
+    MAX  0.5 144   720
+    MIN  0.5 144   720
+
+*** Presentation ***
+
+template = /usr/local/smokeping/etc/basepage.html.dist
+
+charset =utf-8
+
++ charts
+
+menu = Charts
+title = The most interesting destinations
+
+++ stddev
+sorter = StdDev(entries=>4)
+title = Top Standard Deviation
+menu = Std Deviation
+format = Standard Deviation %f
+
+++ max
+sorter = Max(entries=>5)
+title = Top Max Roundtrip Time
+menu = by Max
+format = Max Roundtrip Time %f seconds
+
+++ loss
+sorter = Loss(entries=>5)
+title = Top Packet Loss
+menu = Loss
+format = Packets Lost %f
+
+++ median
+sorter = Median(entries=>5)
+title = Top Median Roundtrip Time
+menu = by Median
+format = Median RTT %f seconds
+
++ overview 
+
+width = 800
+height = 200
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+#+ hierarchies
+#++ owner
+#title = Host Owner
+#++ location
+#title = Location
+
+*** Probes ***
+
++ FPing
+
+binary = /usr/local/sbin/fping
+
+*** Slaves ***
+secrets=/usr/local/smokeping/etc/smokeping_secrets.dist
+# +boomer
+# display_name=boomer
+# color=0000ff
+
+# +slave2
+# display_name=another
+# color=00ff00
+
++SJHL
+display_name=世纪互联
+color= 66ffff
+
++ZW
+display_name=兆维
+color= 6959cd
+
++KDQ
+display_name=看丹桥
+color=330000
+
++MXY
+display_name=木樨园
+color=3300cc
+
++SDZX
+display_name=首都在线
+color=6600cc
+
++SDZX_GIC
+display_name=首都在线_GIC
+color= ff8c00
+
++YKD
+display_name=优刻得
+color=a0522d
+
++YKD2
+display_name=优刻得2
+color=8b4513
+
++ALY
+display_name=阿里云
+color=ffff00
+
++TXY
+display_name=腾讯云
+color=228b22
+
++JSBJ
+display_name=金山北京
+color=00fa9a
+
++JSSH
+display_name=金山上海
+color=00bfff
+
+# +LingKong_Office
+# display_name=启明国际大厦
+# color=000000
+
+# +korea
+# display_name=韩国
+# color=336633
+
+# +LK_TaiWan_65
+# display_name=台湾网关
+# color= 6600ff
+
+# +king_241
+# display_name=王者_云平台203.195.180.241
+# color=9900ff
+
+# +king_89
+# display_name= 王者_云平台_203.195.189.89  
+# color= ff00ff
+
+
+# +szr_211
+# display_name= 神之刃_云平台_203.195.192.211  
+# color= 0000CD
+
+
+
+*** Targets ***
+probe = FPing
+
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to the SmokePing website of LineKong Company. \
+         Here you will learn all about the latency of our network.
+
++Local_IDC
+menu = 本地机房
+title = IDC Hosts Monitor NetWork
+slaves = SJHL  KDQ MXY SDZX SDZX_GIC ALY TXY JSBJ    YKD2   #该slaves会被应用到其下的各个子项中
+#alerts = 网络中断,中断恢复,丢包严重,丢包报警,延迟较高
+nomasterpoll = yes
+
+
+++SJHL_49
+menu = 世纪互联_49
+title = 世纪互联_59.151.49.159
+slaves =   SJHL  KDQ MXY SDZX SDZX_GIC ALY TXY JSBJ  YKD YKD2
+host = 59.151.49.159
+
+
+++KDQ
+menu = 看丹桥
+title = 看丹桥_42.62.51.227
+host = 42.62.51.227
+
+
+++MXY_New
+menu = 木樨园
+title = 木樨园_123.59.16.18
+host = 123.59.16.18
+
+++SDZX
+menu = 首都在线
+title = 首都在线_103.244.235.132
+host = 103.244.235.132
+
+++SDZX_GIC
+menu = 首都在线GIC
+title = 首都在线_GIC_106.3.130.201
+host = 106.3.130.201
+
+++YKD
+menu = 优刻得
+title = 优刻得_180.150.189.19
+host = 180.150.189.19
+alerts =
+
+++YKD2
+menu = 优刻得2 
+title = 优刻得2_106.75.71.253
+host = 106.75.71.253
+
+++ALY
+menu = 阿里云
+title = 阿里云_112.126.66.7
+host = 112.126.66.7
+alerts =
+
+++TXY
+menu = 腾讯云
+title = 腾讯云_203.195.213.113
+host = 203.195.213.113
+
+++JSBJ
+menu = 金山云北京
+title = 金山云_北京_123.59.15.11
+host = 123.59.15.11
+
+++JSSH
+menu = 金山云上海VPC
+title = 金山云_上海VPC_45.124.124.109
+host = 45.124.124.109
+alerts =
+
+++LingKong_Office
+menu = 启明国际大厦
+title = 启明国际大厦_113.208.129.8
+host = 113.208.129.8
+alerts = 
+
+++Korea
+menu = 韩国
+title =  韩国_58.229.184.195
+host = 58.229.184.195
+alerts=
+
+++LK_TaiWan_65
+menu = 台湾网关
+title = 台湾网关
+host = 113.196.89.65
+alerts=
+
++Tencent_cloud
+menu = 腾讯云平台
+title = 腾讯云平台
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+nomasterpoll = yes
+
+++TC_king
+menu = 王者_云平台
+title = 王者_云平台
+
++++king_241
+menu = 203.195.180.241
+title = 王者_云平台203.195.180.241
+host = 203.195.180.241
+
++++king_89
+menu = 203.195.189.89
+title = 王者_云平台_203.195.189.89
+host = 203.195.189.89
+
+++TC_SZR
+menu = 神之刃_云平台
+title = 神之刃_云平台
+
++++szr_211
+menu = 203.195.192.211
+title = 神之刃_云平台_203.195.192.211
+host = 203.195.192.211
+
++Legend_of_King
+menu = 王者之剑
+title = 王者之剑
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+#alerts = 网络中断,中断恢复,丢包严重,丢包报警,延迟较高
+nomasterpoll = yes
+
+++King_91
+menu = king_91
+title = service.sj.91.com
+
++++91_FJ_CNC
+menu = 福建网通
+title = 福建网通_58.22.107.136
+host = 58.22.107.136
+
++++91_FJ_CTC
+menu = 福建电信
+title = 福建电信_121.207.242.72
+host = 121.207.242.72
+
++++91_FJ_Mobile
+menu = 福建移动
+title = 福建移动_218.207.216.84
+host = 218.207.216.84
+
+++king_UC
+menu = king_uc
+title = sdk.g.uc.cn
+
++++uc_ZJ_CTC
+menu = 浙江电信
+title = 浙江电信_115.238.230.122
+host = 115.238.230.122
+
++++uc_GD_CTC
+menu = 广东电信
+title = 广东电信_119.147.224.158
+host = 119.147.224.158
+
++++uc_GD_Mobile
+menu = 广东移动
+title = 广东移动_183.233.224.189
+host = 183.233.224.189
+
++++uc_SH_Mobile
+menu = 上海移动
+title = 上海移动_117.135.151.250
+host = 117.135.151.250
+
+++King_MI
+menu = king_MI
+title = mis.migc.xiaomi.com
+
++++MI_BJ_Blue
+menu = 北京蓝汛
+title = 北京蓝汛_223.202.68.53 
+host = 223.202.68.53
+
++++MI_BJ_KDQ
+menu = 看丹桥
+title = 看丹桥_42.62.48.210
+host = 42.62.48.210
+
+++DangLe
+menu = king_DangLe
+title = connect.d.cn
+
++++DangLE_BJ_DXT
+menu = 北京电信通
+title = 北京电信通_118.144.65.115
+host = 118.144.65.115
+
+++king_360
+menu = king_360
+title = openapi.360.cn
+
++++360_BJ_CTC
+menu = 北京电信
+title = 北京电信_218.30.118.206
+host = 218.30.118.206
+
++++360_BJ_CNC
+menu = 北京网通
+title = 北京网通_123.125.82.205
+host = 123.125.82.205
+
++++360_BJ_CTC_YQ
+menu = 北京洋桥电信
+title = 北京洋桥电信_220.181.132.231
+host = 220.181.132.231
+
+++king_QQ
+menu = king_QQ
+title = openapi.3g.qq.com
+
++++QQ_HN_CTC
+menu = 湖南电信
+title = 湖南电信_124.232.132.94
+host = 124.232.132.94
+
++++QQ_GD_CTC
+menu = 广东电信
+title = 广东电信_218.30.64.194
+host = 218.30.64.194
+
++++QQ_SC_CTC
+menu = 四川电信
+title= 四川电信_61.139.8.102
+host = 61.139.8.102
+
++++QQ_BJ_CNC
+menu = 北京网通
+title= 北京网通_220.250.64.19
+host = 220.250.64.19
+
++++QQ_SH_CNC
+menu = 上海网通
+title = 上海网通_27.115.124.157
+host = 27.115.124.157
+
++++QQ_SH_Mobile
+menu = 上海移动
+title = 上海移动_120.204.200.45
+host = 120.204.200.45
+
++++QQ_SH_CTC
+menu = 上海电信
+title = 上海电信_180.153.3.176
+host = 180.153.3.176
+
+++king_QQ_msdk
+menu = king_QQ_msdk
+title = msdk.qq.com
+
++++QQ_msdk_SH_CTC_1
+menu = 上海电信1
+title = 上海电信_180.153.218.232
+host = 180.153.218.232
+
++++QQ_msdk_SH_CTC_2
+menu = 上海电信2
+title = 上海电信_101.226.129.171
+host = 101.226.129.171
+
++++QQ_msdk_SH_CTC_3
+menu = 上海电信3
+title = 上海电信_101.227.131.110
+host = 101.227.131.110
+
+++king_gfan
+menu = king_gfan
+title = api.gfan.com
+
++++gfan_BJ_SanXin
+menu = 北京三星
+title = 北京三星_117.79.130.165
+host = 117.79.130.165
+
+++king_kugou
+menu = king_kugou
+title = gapi.kugou.com
+
++++kugou_GD_CTC
+menu = 广东电信
+title = 广东电信_183.61.119.205
+host = 183.61.119.205
+
++++kugou_GD_CNC
+menu = 广东联通
+title = 广东联通_122.13.67.141
+host = 122.13.67.141
+
++++kugou_DG_Mobile
+menu = 广东移动
+title = 广东移动_183.232.70.205 
+host = 183.232.70.205
+
+++king_OppO
+menu = king_OppO
+title = thapi.nearme.com.cn 
+
++++Oppo_ZJ_CTC
+menu = 浙江电信
+title = 浙江电信_115.236.98.98
+host = 115.236.98.98
+
++++Oppo_ZJ_CNC
+menu = 浙江网通
+title = 浙江网通_60.12.231.68
+host = 60.12.231.68
+
++++Oppo_ZJ_Mobile
+menu = 浙江移动
+title = 浙江移动_120.199.7.218
+host = 120.199.7.218
+
+++king_baidu
+menu = king_baidu
+title = sdk.m.duoku.com 
+
++++baidu_BJ_Mobile
+menu = 北京移动
+title = 北京移动_111.13.46.109
+host = 111.13.46.109
+
++alipay
+menu = 支付宝
+title = Alipay Hosts Monitor
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+nomasterpoll = yes
+
+++alipay1965
+menu = 浙江杭州阿里
+title = 浙江杭州阿里_110.76.19.65
+host = 110.76.19.65
+
+++alipay2065
+menu = 浙江杭州阿里
+title = 浙江杭州阿里_110.76.20.65
+host = 110.76.20.65
+
++China
+menu = 中国网络
+title = 中国人民共和国
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+nomasterpoll = yes
+
+++HuaBei
+menu = 华北
+title = 华北地区
+
++++BeiJing
+menu = 北京
+title = 北京市
+host = 210.73.64.10
+
++++TianJin
+menu = 天津
+title = 天津市
+host = 60.28.81.140
+
++++HeBei
+menu = 河北
+title = 河北省
+host = 121.28.72.194
+
++++ShanXi
+menu = 山西
+title = 山西省
+host = 218.26.168.1
+
++++NeiMengGu
+menu = 内蒙古
+title = 内蒙古自治区
+host = 58.18.164.36
+
+++DongBei
+menu = 东北
+title = 东北地区
+
++++HeiLongJiang
+menu = 黑龙江
+title= 黑龙江省
+host = 1.58.26.133
+
++++JiLin
+menu = 吉林
+title = 吉林省
+host = 218.62.26.196
+
++++LiaoNing
+menu = 辽宁
+title = 辽宁省
+host = 61.161.141.18
+
+++HuaDong
+menu = 华东
+title = 华东地区
+
++++ShangHai
+menu =  上海
+title = 上海市
+host = 61.129.65.58
+
++++JiangSu
+menu = 江苏
+title = 江苏省
+host = 218.2.208.139
+
++++ZheJiang
+menu = 浙江
+title = 浙江省
+host = 61.130.1.1
+
++++AnHui
+menu = 安徽
+title = 安徽省
+host = 218.22.0.147
+
++++FuJian
+menu = 福建
+title = 福建省
+host = 218.85.65.9
+
++++JiangXi
+menu = 江西
+title = 江西省
+host = 218.87.32.231
+
++++ShanDong
+menu = 山东
+title = 山东省
+host = 60.216.89.1
+
+++HuaZhong
+menu = 华中
+title = 华中地区
+
++++HeNan
+menu = 河南
+title = 河南省
+host = 218.29.1.1
+
++++HuBei
+menu = 湖北
+title = 湖北省
+host = 219.140.161.86
+
++++HuNan
+menu = 湖南
+title = 湖南省
+host = 113.240.233.84
+
+++HuaNan
+menu = 华南
+title = 华南地区
+
++++GuangDong
+menu = 广东
+title = 广东省183.61.9.45
+host = 183.61.9.45
+
++++GuangXI
+menu = 广西
+title = 广西自治区
+host = 219.159.73.193 
+
++++HaiNan
+menu = 海南
+title = 海南省
+host = 218.77.183.200
+
++++AoMen
+menu = 澳门
+title = 澳门行政区
+host = 202.175.13.200
+
+++XiBei
+menu = 西北
+title = 西北地区
+
++++NingXia
+menu = 宁夏
+title = 宁夏自治区
+host = 218.95.217.226
+
++++XinJiang
+menu = 新疆
+title = 新疆自治区
+host = 218.202.219.192
+
++++QingHai
+menu = 青海
+title = 青海省
+host = 223.220.250.13
+
++++ShanXi
+menu = 陕西
+title = 陕西省
+host = 124.115.8.1
+
++++GanSu
+menu = 甘肃
+title = 甘肃省
+host = 202.100.65.130
+
+++XiNan
+menu = 西南
+title = 西南地区
+
++++SiChuan
+menu = 四川
+title = 四川省
+host = 125.64.4.1
+
+
++++ChongQing
+menu = 重庆
+title = 重庆市
+host = 219.153.1.197
+
++++YunNan
+menu = 云南
+title = 云南省
+host = 61.159.229.1
+
++++GuiZhou
+menu = 贵州
+title = 贵州自治区
+host = 219.151.7.1
+
++++XiZang
+menu = 西藏
+title = 西藏自治区
+host = 220.182.3.132
+
++ChinaDX
+menu = 中国电信网络
+title = 中国电信网络
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+nomasterpoll = yes
+
+++DX_FuJian
+menu = 福建电信
+title = 福建电信_218.85.152.99
+host = 218.85.152.99
+
+++DX_GanSu
+menu = 甘肃电信
+title = 甘肃电信_202.100.64.68
+host = 202.100.64.68
+
+++DX_GuiZhou
+menu = 贵州电信
+title = 贵州电信_202.98.198.167
+host = 202.98.198.167
+
+++DX_HeNan
+menu = 河南电信
+title = 河南电信_222.88.88.88
+host = 222.88.88.88
+
+++DX_HuBei
+menu = 湖北电信
+title = 湖北电信_202.103.24.68
+host = 202.103.24.68
+
+++DX_JiangSu
+menu = 江苏电信
+title = 江苏电信_218.2.2.2
+host = 218.2.2.2
+
+++DX_JiangXi
+menu = 江西电信
+title = 江西电信_202.101.224.69
+host = 202.101.224.69
+
+++DX_ShangHai
+menu = 上海电信 
+title = 上海电信_202.96.209.133
+host = 202.96.209.133
+
+++DX_SiChuan
+menu = 四川电信
+title = 四川电信_61.139.2.69
+host = 61.139.2.69
+
+++DX_TianJin
+menu = 天津电信
+title = 天津电信_219.150.32.132
+host = 219.150.32.132
+
+++DX_YunNan
+menu = 云南电信
+title = 云南电信_222.172.200.68
+host = 222.172.200.68
+
+++DX_HanNan
+menu = 海南电信
+title = 海南电信_218.77.183.201
+host = 218.77.183.201
+
+++DX_GuangXi
+menu = 广西电信
+title = 广西电信_219.159.73.199
+host = 219.159.73.199
+
++ChinaLT
+menu = 中国联通网络
+title = 中国联通网络
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+alerts =
+nomasterpoll = yes
+
+++LT_ChongQing
+menu = 重庆联通
+title = 重庆联通_221.5.203.98
+host = 221.5.203.98
+
+++LT_GuangDong
+menu = 广东联通
+title = 广东联通_210.21.196.6
+host = 210.21.196.6
+
+++LT_HeBei
+menu = 河北联通
+title = 河北联通_202.99.160.68
+host = 202.99.160.68
+
+++LT_HeiLongJiang
+menu = 黑龙江联通
+title = 黑龙江联通_202.97.224.69
+host = 202.97.224.69
+
+++LT_JiangSu
+menu = 江苏联通
+title = 江苏联通_221.6.4.66
+host = 221.6.4.66
+
+++LT_NeiMengGu
+menu = 内蒙古联通
+title = 内蒙古联通_202.99.224.68
+host = 202.99.224.68
+
+++LT_ShanXi
+menu = 山西联通
+title = 山西联通_202.99.192.66
+host = 202.99.192.66
+
+++LT_ShanDong
+menu = 山东联通
+title = 山东联通_202.102.128.68
+host = 202.102.128.68
+
+++LT_ShanXi4
+menu = 陕西联通
+title = 陕西联通_221.11.1.67
+host = 221.11.1.67
+
+++LT_SiChuan
+menu = 四川联通
+title = 四川联通_119.6.6.6
+host = 119.6.6.6
+
+++LT_TianJin
+menu = 天津联通
+title = 天津联通_202.99.96.68
+host = 202.99.96.68
+
+++LT_ZheJiang
+menu = 浙江联通
+title = 浙江联通_221.12.1.227
+host = 221.12.1.227
+
++ChinaMobile
+menu = 中国移动网络
+title = 中国移动网络
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+alerts =
+nomasterpoll=yes
+
+++Mobile_ShanXi1
+host = 211.138.106.2
+menu = 山西移动
+title = 山西移动_211.138.106.2
+
+++Mobile_ShanDong
+host = 218.201.96.130
+menu = 山东移动
+title = 山东移动_218.201.96.130
+
+++Mobile_JiangXi
+host = 211.141.90.68
+menu = 江西移动
+title = 江西移动_211.141.90.68
+
+++Mobile_JiangSu
+host = 221.130.13.133
+menu = 江苏移动
+title = 江苏移动_221.130.13.133
+
+++Mobile_SiChuan
+host = 211.137.82.4
+menu = 四川移动
+title = 四川移动_211.137.82.4
+
+++Mobile_AnHui
+host = 211.138.180.2
+menu = 安徽移动
+title = 安徽移动_211.138.180.2
+
+++Mobile_ChongQing
+host = 221.179.38.7
+menu = 重庆移动
+title = 重庆移动_221.179.38.7
+
+++Mobile_BeiJing
+host = 211.136.17.107
+menu = 北京移动
+title = 北京移动_211.136.17.107
+#alerts = 网络中断,中断恢复,丢包严重,丢包报警,延迟较高
+
+++Mobile_HeNan
+host = 211.138.30.66
+menu = 河南移动
+title = 河南移动_211.138.30.66
+
+++Mobile_GuangDong
+host = 211.136.192.6
+menu = 广东移动
+title = 广东移动_211.136.192.6
+
+++Mobile_GuangXi
+host = 211.138.245.180
+menu = 广西移动
+title = 广西移动_211.138.245.180
+
+++Mobile_GuiZhou
+host = 211.139.5.30
+menu = 贵州移动
+title = 贵州移动_211.139.5.30
+
+++Mobile_LiaoNing
+host = 211.137.32.178
+menu = 辽宁移动
+title = 辽宁移动_211.137.32.178
+
+++Mobile_NeiMengGu
+host = 211.138.91.1
+menu = 内蒙古移动
+title = 内蒙古移动_211.138.91.1
+
+++Mobile_JiangSu1
+host = 211.138.200.69
+menu = 江苏移动
+title = 江苏移动_211.138.200.69
+
+++Mobile_GanSu
+host = 218.203.160.194
+menu = 甘肃移动
+title = 甘肃移动_218.203.160.194
+
+++Mobile_FuJian
+host = 211.143.181.178
+menu = 福建移动
+title = 福建移动_211.143.181.178
+
+++Mobile_JiLin
+host = 211.141.16.99
+menu = 吉林移动
+title = 吉林移动_211.141.16.99
+
+++Mobile_TianJin
+host = 211.137.160.5 
+menu = 天津移动
+title = 天津移动_211.137.160.5
+
+++Mobile_ZheJiang
+host = 211.140.10.2
+menu = 浙江移动
+title = 浙江移动_211.140.10.2
+
+++Mobile_HeiLongJiang
+host = 211.137.241.34
+menu = 黑龙江移动
+title = 黑龙江移动_211.137.241.34
+
+++Mobile_HaiNan
+host = 221.176.88.95
+menu = 海南移动
+title = 海南移动_221.176.88.95
+
+++Mobile_XinJiang
+host = 218.202.152.131
+menu = 新疆移动
+title = 新疆移动_218.202.152.131
+
+++Mobile_QingHai
+host = 211.138.75.123
+menu = 青海移动
+title = 青海移动_211.138.75.123
+
+++Mobile_XiZang
+host = 211.139.73.34
+menu = 西藏移动
+title = 西藏移动_211.139.73.34
+
+
++ChinaCK
+menu = 长城宽带
+title = 长城宽带
+slaves = SJHL   ZW KDQ MXY SDZX SDZX_GIC YKD ALY TXY JSBJ  YKD2
+alerts = 
+nomasterpoll = yes
+
+++CK_GuangDong
+menu = 广东
+title = 广东长宽_211.162.78.2
+host = 211.162.78.2
+
+++CK_BeiJing
+menu = 北京
+title = 北京长宽_211.161.46.84
+host = 211.161.46.84
+
+++CK_TianJin
+menu = 天津
+title = 天津长宽_220.115.240.242
+host = 220.115.240.242
+
+++CK_SiChuan
+menu = 四川
+title = 四川长宽_211.162.130.33
+host = 211.162.130.33
+
+
+++CK_ShangHai
+menu = 上海
+title = 上海长宽_211.161.192.73
+host = 211.161.192.73
+
+++CK_ChongQing
+menu = 重庆
+title = 重庆长宽_211.162.208.18
+host = 211.162.208.18
+
+++CK_AnHui
+menu = 安徽
+title = 安徽长宽_211.162.0.10
+host = 211.162.0.10 
+
+++CK_JiangSu
+menu = 江苏
+title = 江苏长宽_211.162.31.8
+host = 211.162.31.8
+
+++CK_FuJian
+menu = 福建
+title = 福建长宽_211.162.32.1
+host = 211.162.32.1
+
+++CK_HuNan
+menu = 湖南
+title = 湖南长宽_211.161.116.153
+host = 211.161.116.153
+
+++CK_JiangXi
+menu = 江西
+title = 江西长宽_211.161.112.249
+host = 211.161.112.249
+
+++CK_ShanXi4
+menu = 陕西
+title = 陕西长宽_180.89.255.2
+host = 180.89.255.2
+
+++YKD2
+menu = 优刻得2 
+title = 优刻得_106.75.71.253
+host = 106.75.71.253
+

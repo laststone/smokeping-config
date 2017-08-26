@@ -1,0 +1,707 @@
+*** General ***
+
+owner    = Peter Random
+contact  = some@address.nowhere
+mailhost = my.mail.host
+sendmail = /usr/sbin/sendmail
+# NOTE: do not put the Image Cache below cgi-bin
+# since all files under cgi-bin will be executed ... this is not
+# good for images.
+imgcache = /usr/local/smokeping/cache
+imgurl   = cache
+datadir  = /usr/local/smokeping/data
+piddir  = /usr/local/smokeping/var
+cgiurl   = http://some.url/smokeping.cgi
+smokemail = /usr/local/smokeping/etc/smokemail.dist
+tmail = /usr/local/smokeping/etc/tmail.dist
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = alertee@address.somewhere
+from = smokealert@company.xy
+
++someloss
+type = loss
+# in percent
+pattern = >0%,*12*,>0%,*12*,>0%
+comment = loss 3 times  in a row
+
+*** Database ***
+
+step     = 60
+pings    = 30
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  1008
+AVERAGE  0.5  12  4320
+    MIN  0.5  12  4320
+    MAX  0.5  12  4320
+AVERAGE  0.5 144   720
+    MAX  0.5 144   720
+    MIN  0.5 144   720
+
+*** Presentation ***
+
+template = /usr/local/smokeping/etc/basepage.html.dist
+
+charset =utf-8     #设置界面中文显示
+
+#+ charts
+
+#menu = Targets
+#title = The most interesting destinations
+
+#++ stddev
+#sorter = StdDev(entries=>4)
+#title = Top Standard Deviation
+#menu = Std Deviation
+#format = Standard Deviation %f
+
+#++ max
+#sorter = Max(entries=>5)
+#title = Top Max Roundtrip Time
+#menu = by Max
+#format = Max Roundtrip Time %f seconds
+
+#++ loss
+#sorter = Loss(entries=>5)
+#title = Top Packet Loss
+#menu = Loss
+#format = Packets Lost %f
+
+#++ median
+#sorter = Median(entries=>5)
+#title = Top Median Roundtrip Time
+#menu = by Median
+#format = Median RTT %f seconds
+
++ overview 
+
+width = 800      #设置显示图像的长宽
+height = 200
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"   3h    #给标题加 from xxIP
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+#+ hierarchies
+#++ owner
+#title = Host Owner
+#++ location
+#title = Location
+
+*** Probes ***
+
++ FPing
+
+binary = /usr/local/sbin/fping
+
+*** Slaves ***
+secrets=/usr/local/smokeping/etc/smokeping_secrets.dist
+
++SJHL39
+display_name= 世纪互联_39  
+color= 993300
+
++SJHL49
+display_name=世纪互联_49
+color= 66ffff
+
++SZQ
+display_name=苏州桥
+color=330000
+
++KDQ
+display_name=看丹桥
+color=330000
+
++ZW
+display_name=兆维
+color=9900ff
+
++MXY
+display_name=木樨园
+color=3300cc
+
++SDZX
+display_name=首都在线
+color=6600cc
+
++SDZX_GIC
+display_name=首都在线_GIC
+color= ff8c00
+
++YKD
+display_name=优刻得
+color=a0522d
+
++YKD2
+display_name=优刻得2
+color=8b4513
+
++ALY
+display_name=阿里云
+color=ffff00
+
++TXY
+display_name=腾讯云
+color=228b22
+
++JSBJ
+display_name=金山北京
+color=00fa9a
+
++JSSH
+display_name=金山上海
+color=00bfff
+
++QMDS
+display_name=启明大厦
+color=000000
+
++KOREA
+display_name=韩国
+color=336633
+
++SJHL00000
+display_name=世纪互联00000
+color=336633
+
+##################################targets 定义监控的机房IP及其slave#####################################################
+
+
+
+*** Targets ***
+
+probe = FPing
+
+menu = Top
+title = Network Latency Grapher
+#remark = Welcome to the SmokePing website of xxx Company. \
+#         Here you will learn all about the latency of our network.
+
+
+
+#####################################
+#########本地机房####################
+#####################################
++ local_network
+menu = 本地机房
+title = IDC Hosts Monitor NetWork
+#host = /local_network/SJHL39 /local_network/SJHL49 /local_network/SZQ /local_network/KDQ /local_network/ZW /local_network/MXY /local_network/SDZX /local_network/SDZX_GIC /local_network/YKD /local_network/YKD2 /local_network/ALY /local_network/TXY /local_network/JSBJ /local_network/JSSH /local_network/QMDS /local_network/KOREA
+#host可以指出来，也可以不写出来，建议不写出来
+
+
+++ SJHL00000
+menu = 世纪互联_39
+title = 世纪互联_39_59.151.39.139
+slaves = JSSH QMDS KOREA
+#host = 59.151.39.139
+
++++SJHL39_1
+menu = 203.195.189.89
+title = 王者1_云平台_203.195.189.89
+host = 203.195.189.89
+
++++SJHL39_2
+menu = 203.195.189.89
+title = 王者2_云平台_203.195.189.89
+host = 203.195.189.89
+
+
+
+
+
+
+
+
+++ SJHL49
+menu = 世纪互联_49
+title = 世纪互联_49_59.151.49.51
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 59.159.49.51
+
+
+++ SZQ
+menu = 苏州桥 
+title = 苏州桥_115.182.54.98
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 115.182.54.98
+
+++ KDQ 
+menu = 看丹桥
+title = 看丹桥_42.62.51.227
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 42.62.51.227
+
+++ ZW
+menu = 兆维
+title = 兆维_42.62.9.222
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 42.62.9.222
+
+++ MXY
+menu = 木樨园
+title = 木樨园_123.59.16.18
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 123.59.16.18
+
+++ SDZX
+menu = 首都在线
+title = 首都在线_103.244.235.132
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 103.244.235.132
+
+++ SDZX_GIC
+menu = 首都在线_GIC
+title = 首都在线_GIC_106.3.130.201
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 106.3.130.201
+
+++ YKD
+menu = 优刻得
+title = 优刻得_180.150.189.19
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 180.150.189.19
+
+++ YKD2
+menu = 优刻得_2
+title = 优刻得_2_106.75.71.253
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 106.75.71.253
+
+++ ALY
+menu = 阿里云
+title = 阿里云_112.126.66.7
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 112.126.66.7
+
+++ TXY
+menu = 腾讯云
+title = 腾讯云_203.195.213.113
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 203.195.213.113
+
+++ JSBJ
+menu = 金山北京
+title = 金山北京_123.59.15.11
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 123.59.15.11
+
+++ JSSH
+menu = 金山上海
+title = 金山上海_45.124.124.109
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 45.124.124.109
+
+++ QMDS
+menu = 启明大厦
+title = 启明大厦_113.208.129.8
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 113.208.129.8
+
+++ KOREA
+menu = 韩国
+title = 韩国_58.229.184.195
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 58.229.184.195
+
+
+
+#########################################
+#######中国移动网络######################
+#########################################
+
++ China_Mobile
+menu = 中国移动网络
+title = 中国移动网络
+host = /China_Mobile/SXYD1 /China_Mobile/SDYD /China_Mobile/JXYD /China_Mobile/JSYD /China_Mobile/SCYD /China_Mobile/AHYD /China_Mobile/CQYD /China_Mobile/BJYD /China_Mobile/HNYD1 /China_Mobile/GDYD /China_Mobile/GXYD /China_Mobile/GZYD /China_Mobile/LNYD /China_Mobile/NMGYD /China_Mobile/JSYD /China_Mobile/GSYD /China_Mobile/FJYD /China_Mobile/JLYD /China_Mobile/TJYD /China_Mobile/ZJYD /China_Mobile/HLJYD /China_Mobile/HNYD2 /China_Mobile/XJYD /China_Mobile/QHYD /China_Mobile/XZYD
+
+++ SXYD1
+menu = 山西移动
+title = 山西移动_211.138.106.2
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.138.106.2
+
+++ SDYD
+menu = 山东移动
+title = 山东移动_218.201.96.130
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 218.201.96.130
+
+++ JXYD
+menu = 江西移动
+title = 江西移动_211.141.90.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.141.90.68
+
+++ JSYD
+menu = 江苏移动
+title = 江苏移动_221.130.13.133
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 221.130.13.133
+
+++ SCYD
+menu = 四川移动
+title = 四川移动_211.137.82.4
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.137.82.4
+
+++ AHYD
+menu = 安徽移动
+title = 安徽移动_211.138.180.2
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.138.180.2
+
+++ CQYD
+menu = 重庆移动
+title = 重庆移动_221.179.38.7
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 221.179.38.7
+
+++ BJYD
+menu = 北京移动
+title = 北京移动_211.136.17.107
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.136.17.107
+
+++ HNYD1
+menu = 河南移动
+title = 河南移动_211.138.30.66
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.138.30.66
+
+++ GDYD
+menu = 广东移动
+title = 广东移动_211.136.192.6
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.136.192.6
+
+++ GXYD
+menu = 广西移动
+title = 广西移动_211.138.245.180
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.138.245.180
+
+++ GZYD
+menu = 贵州移动
+title = 贵州移动_211.139.5.30
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.139.5.30
+
+++ LNYD
+menu = 辽宁移动
+title = 辽宁移动_211.137.32.178
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.137.32.178
+
+++ NMGYD
+menu = 内蒙古移动
+title = 内蒙古移动_211.138.91.1
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.138.91.1
+
+++ GSYD
+menu = 甘肃移动
+title = 甘肃移动_218.203.160.194
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 218.203.160.194
+
+++ FJYD
+menu = 福建移动
+title = 福建移动_211.143.181.178
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.143.181.178
+
+++ JLYD
+menu = 吉林移动
+title = 吉林移动_211.141.16.90
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.141.16.90
+
+++ TJYD
+menu = 天津移动
+title = 天津移动_211.137.160.5
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.137.160.5
+
+++ ZJYD
+menu = 浙江移动
+title = 浙江移动_211.140.10.2
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.140.10.2
+
+++ HLJYD
+menu = 黑龙江移动
+title = 黑龙江移动_211.137.241.34
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.137.241.34
+
+++ HNYD2
+menu = 海南移动
+title = 海南移动_221.176.88.95
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 221.176.88.95
+
+++ XJYD
+menu = 新疆移动
+title = 新疆移动_218.202.152.131
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 218.202.152.131
+
+++ QHYD
+menu = 青海移动
+title = 青海移动_211.138.75.123
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 211.138.75.123
+
+++ XZYD
+menu = 西藏移动
+title = 西藏移动_211.139.73.34
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 211.139.73.34
+
+
+#########################################
+#######中国联通网络######################
+#########################################
+
++ China_Unicom
+menu = 中国联通网络
+title = 中国联通网络
+host = /China_Unicom/CQLT /China_Unicom/CQLT /China_Unicom/HBLT /China_Unicom/HLJLT /China_Unicom/JSLT /China_Unicom/NMGLT /China_Unicom/SXLT1 /China_Unicom/SDLT /China_Unicom/SXLT2 /China_Unicom/SCLT /China_Unicom/TJLT /China_Unicom/ZJLT
+
+++ CQLT
+menu = 重庆联通
+title = 重庆联通_221.5.203.98
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 221.5.203.98
+
+++ GDLT
+menu = 广东联通
+title = 广东联通_210.21.196.6
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 210.21.196.6
+
+++ HBLT
+menu = 河北联通
+title = 河北联通_202.99.160.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.99.160.68
+
+++ HLJLT
+menu = 黑龙江联通
+title = 黑龙江联通_202.97.224.69
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.97.224.69
+
+++ JSLT
+menu = 江苏联通
+title = 江苏联通_221.6.4.66
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 221.6.4.66
+
+++ NMGLT
+menu = 内蒙古联通
+title = 内蒙古联通_202.99.224.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 202.99.224.68
+
+++ SXLT1
+menu = 山西联通
+title = 山西联通_202.99.192.66
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.99.192.66
+
+++ SDLT
+menu = 山东联通
+title = 山东联通_202.102.128.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 202.102.128.68
+
+++ SXLT2
+menu = 陕西联通
+title = 陕西联通_221.11.1.67
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 221.11.1.67
+
+++ SCLT
+menu = 四川联通
+title = 四川联通_119.6.6.6
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 119.6.6.6
+
+++ TJLT
+menu = 天津联通
+title = 天津联通_202.99.96.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.99.96.68
+
+++ ZJLT
+menu = 浙江联通
+title = 浙江联通_221.12.1.227
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 221.12.1.227
+
+#########################################
+#######中国电信网络######################
+#########################################
+
++ China_Telecom
+menu = 中国电信网络
+title = 中国电信网络
+host = /China_Telecom/FJDX /China_Telecom/GSDX /China_Telecom/GZDX /China_Telecom/HNDX1 /China_Telecom/HBDX /China_Telecom/JSDX /China_Telecom/JXDX /China_Telecom/SHDX /China_Telecom/SCDX /China_Telecom/TJDX /China_Telecom/YNDX /China_Telecom/HNDX /China_Telecom/GXDX
+
+++ FJDX
+menu = 福建电信
+title = 福建电信_218.85.152.99
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 218.85.152.99
+
+++ GSDX
+menu = 甘肃电信
+title = 甘肃电信_202.100.64.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.100.64.68
+
+++ GZDX
+menu = 贵州电信
+title = 贵州电信_202.98.198.167
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.98.198.167
+
+++ HNDX1
+menu = 河南电信
+title = 河南电信_222.88.88.88
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 222.88.88.88
+
+++ HBDX
+menu = 湖北电信
+title = 湖北电信_202.103.24.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 202.103.24.68
+
+++ JSDX
+menu = 江苏电信
+title = 江苏电信_218.2.2.2
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 218.2.2.2
+
+++ JXDX
+menu = 江西电信
+title = 江西电信_202.101.224.69
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.101.224.69
+
+++ SHDX
+menu = 上海电信
+title = 上海电信_202.96.209.133
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA 
+host = 202.96.209.133
+
+++ SCDX
+menu = 四川电信
+title = 四川电信_61.139.2.69
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 61.139.2.69
+
+++ TJDX
+menu = 天津电信
+title = 天津电信_219.150.32.132
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 219.150.32.132
+
+++ YNDX
+menu = 云南电信
+title = 云南电信_222.172.200.68
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 222.172.200.68
+
+++ HNDX
+menu = 海南电信
+title = 海南电信_218.77.183.201
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 218.77.183.201
+
+++ GXDX
+menu = 广西电信
+title = 广西电信_219.159.73.199
+slaves = SJHL39 SJHL49 SZQ KDQ ZW MXY SDZX SDZX_GIC YKD YKD2 ALY TXY JSBJ JSSH QMDS KOREA
+host = 219.159.73.199
+
+
+
+
+
+
+
+
+
+
+
+
+
+
++ local_test
+menu = 本地测试
+title = 本地测试
+host = /local_test/sijihulian39 /local_test/suzhouqiao /local_test/kandanqiao /local_test/zhaowei /local_test/chongyou /local_test/jd /local_test/aiqiyi
+
+
+++ sijihulian39
+menu = 世纪互联39
+title = 世纪互联_39_59.151.39.139
+host = 59.151.39.139
+
+
+++ suzhouqiao
+menu = 苏州桥
+title = 苏州桥_115.182.54.98
+host = 115.182.54.98
+
+++ kandanqiao
+menu = 看丹桥
+title = 看丹桥_42.62.51.227
+host = 42.62.51.227
+
+
+++ zhaowei
+menu = 兆维
+title = 兆维_42.62.9.222
+host = 42.62.9.222
+
+++ chongyou
+menu = 重邮
+title = 重邮_219.153.62.66
+host = 219.153.62.66
+
+++ jd
+menu = 京东
+title = 京东_106.39.178.1
+host = 106.39.178.1
+
+++ aiqiyi
+menu = 爱奇艺
+title = 爱奇艺_106.38.178.77
+host = 106.38.178.77
+
+
+
+
+
+
+
