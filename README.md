@@ -17,4 +17,5 @@ CentOS6.5中：smokeping安装与配置项
 然后，httpd的配置使用给定的配置文件覆盖即可
 之后，smokeping的配置复制使用给定的配置文件即可
 最后，按照配置资料进行配置，设置service管理和开机自启
+
 （注意：全程关闭iptables和selinux）
