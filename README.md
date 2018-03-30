@@ -2,7 +2,6 @@
 CentOS6.5中：smokeping安装与配置项
 
 
-
 推荐安装资料：http://blog.csdn.net/fairplay_li/article/details/45817095
 推荐配置资料：http://www.xuliangwei.com/xubusi/507.html?utm_source=tuicool&utm_medium=referral
 
